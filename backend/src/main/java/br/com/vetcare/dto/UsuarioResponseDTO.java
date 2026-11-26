@@ -28,3 +28,5 @@ public class UsuarioResponseDTO {
         return email;
     }
 }
+
+// Retorna dados para os clientes como resposta de um processamento (cadastro ou uma adocao efetivada)

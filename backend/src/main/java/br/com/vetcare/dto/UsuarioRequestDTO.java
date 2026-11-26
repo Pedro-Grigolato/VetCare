@@ -52,3 +52,5 @@ public class UsuarioRequestDTO {
         this.senha = senha;
     }
 }
+
+// Recebe os dados enviados pelo cliente (como no cadastro ou login de um usuario)
