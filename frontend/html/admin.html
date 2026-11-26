@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Admin · VetCare</title>
+    <link rel="icon" type="image/webp" href="img/logo.webp" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/admin.css" />
+    <script defer src="js/pets-extra.js"></script>
+    <script defer src="js/admin.js"></script>
+  </head>
+  <body>
+    <header class="adm-header">
+      <div class="adm-bar">
+        <a class="adm-brand" href="admin.html" aria-label="VetCare Admin">
+          <img src="img/logo.webp" alt="" />
+          <span>VetCare</span>
+        </a>
+        <label class="adm-search">
+          <input id="search" type="search" placeholder="Buscar animal..." aria-label="Buscar animal" />
+          <span aria-hidden="true">⌕</span>
+        </label>
+        <nav class="adm-actions" aria-label="Atalhos">
+          <span class="adm-link is-current">Admin</span>
+          <a class="adm-link" href="index.html#pets">Ver site</a>
+          <a class="adm-link" href="index.html">Sair</a>
+        </nav>
+      </div>
+      <nav class="adm-sub" aria-label="Seções do painel">
+        <button type="button" class="is-current" data-view="animais">Animais</button>
+        <button type="button" data-view="interessados">Interessados <span class="adm-badge" id="leads-new" hidden>0</span></button>
+        <span class="adm-chip">Painel administrativo</span>
+      </nav>
+    </header>
+
+    <main class="adm-main">
+      <section class="adm-panel" id="view-animais" aria-labelledby="titulo">
+        <div class="adm-head">
+          <h1 id="titulo">Animais</h1>
+          <button class="adm-btn" id="new-pet" type="button">+ Novo animal</button>
+        </div>
+
+        <div class="adm-toolbar">
+          <div class="adm-tabs" role="tablist" aria-label="Filtrar por situação" id="tabs">
+            <button role="tab" class="is-active" data-status="all">Todos</button>
+            <button role="tab" data-status="available">Disponíveis</button>
+            <button role="tab" data-status="process">Em processo</button>
+            <button role="tab" data-status="adopted">Adotados</button>
+            <button role="tab" data-status="inactive">Inativos</button>
+          </div>
+          <span class="adm-count" id="count" aria-live="polite">0 animais</span>
+        </div>
+
+        <div class="adm-table-wrap">
+          <table class="adm-table">
+            <thead>
+              <tr>
+                <th class="col-photo"><span class="sr">Foto</span></th>
+                <th>Nome</th>
+                <th>Espécie</th>
+                <th>Idade</th>
+                <th>Porte</th>
+                <th>Status</th>
+                <th class="col-act"><span class="sr">Ações</span></th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+          <p class="adm-empty" id="empty" hidden>Nenhum animal encontrado.</p>
+        </div>
+      </section>
+
+      <section class="adm-panel" id="view-interessados" aria-labelledby="titulo-leads" hidden>
+        <div class="adm-head">
+          <h1 id="titulo-leads">Interessados</h1>
+          <span class="adm-count" id="leads-count" aria-live="polite">0 pedidos</span>
+        </div>
+        <p class="adm-note">Dados de exemplo: quando o formulário "Quero dar um lar" do site estiver integrado, os pedidos de adoção aparecerão aqui.</p>
+
+        <div class="adm-toolbar">
+          <div class="adm-tabs" role="tablist" aria-label="Filtrar por andamento" id="lead-tabs">
+            <button role="tab" class="is-active" data-status="all">Todos</button>
+            <button role="tab" data-status="new">Novos</button>
+            <button role="tab" data-status="contact">Em contato</button>
+            <button role="tab" data-status="visit">Visita agendada</button>
+            <button role="tab" data-status="approved">Aprovados</button>
+            <button role="tab" data-status="declined">Recusados</button>
+          </div>
+        </div>
+
+        <div class="adm-table-wrap">
+          <table class="adm-table leads">
+            <thead>
+              <tr>
+                <th>Interessado</th>
+                <th>Pet de interesse</th>
+                <th>Telefone</th>
+                <th>Cidade</th>
+                <th>Pedido em</th>
+                <th>Andamento</th>
+                <th class="col-act"><span class="sr">Ações</span></th>
+              </tr>
+            </thead>
+            <tbody id="lead-rows"></tbody>
+          </table>
+          <p class="adm-empty" id="lead-empty" hidden>Nenhum interessado encontrado.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="adm-footer">
+      <img src="img/logo.webp" alt="" />
+      <strong>VetCare</strong>
+      <p>Painel administrativo · © 2026 VetCare. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- Ver -->
+    <dialog id="view-dialog" class="adm-dialog" aria-labelledby="view-name">
+      <button class="adm-x" data-close aria-label="Fechar">×</button>
+      <div id="view-body"></div>
+    </dialog>
+
+    <!-- Criar/editar -->
+    <dialog id="form-dialog" class="adm-dialog" aria-labelledby="form-title">
+      <button class="adm-x" data-close aria-label="Fechar">×</button>
+      <form id="pet-form" novalidate>
+        <h2 id="form-title">Novo animal</h2>
+        <div class="grid">
+          <label>Nome<input name="name" required minlength="2" /></label>
+          <label>Espécie
+            <select name="species"><option value="dog">Cachorro</option><option value="cat">Gato</option></select>
+          </label>
+          <label>Sexo
+            <select name="sex"><option>Macho</option><option>Fêmea</option></select>
+          </label>
+          <label>Porte
+            <select name="size"><option value="small">Pequeno</option><option value="medium">Médio</option><option value="large">Grande</option></select>
+          </label>
+          <label>Idade
+            <input name="age" type="number" min="0" max="300" required />
+          </label>
+          <label>Unidade
+            <select name="unit"><option value="years">anos</option><option value="months">meses</option></select>
+          </label>
+          <label>Raça<input name="breed" value="Sem raça definida" /></label>
+          <label>Cidade<input name="city" value="Botucatu, SP" /></label>
+          <label>Status
+            <select name="status">
+              <option value="available">Disponível</option>
+              <option value="process">Em processo</option>
+              <option value="adopted">Adotado</option>
+              <option value="inactive">Inativo</option>
+            </select>
+          </label>
+          <label>Foto<input name="photo" type="file" accept="image/*" /></label>
+          <label class="wide">História<textarea name="story" rows="3"></textarea></label>
+        </div>
+        <p class="adm-error" id="form-error" role="alert" hidden></p>
+        <div class="adm-form-actions">
+          <button class="adm-btn ghost" type="button" data-close>Cancelar</button>
+          <button class="adm-btn" type="submit">Salvar</button>
+        </div>
+      </form>
+    </dialog>
+
+    <!-- Detalhes do interessado -->
+    <dialog id="lead-dialog" class="adm-dialog" aria-labelledby="lead-name">
+      <button class="adm-x" data-close aria-label="Fechar">×</button>
+      <div id="lead-body"></div>
+    </dialog>
+
+    <div class="adm-toast" id="toast" role="status" aria-live="polite" hidden></div>
+  </body>
+</html>
