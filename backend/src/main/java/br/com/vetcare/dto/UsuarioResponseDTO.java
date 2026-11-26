@@ -2,16 +2,17 @@ package br.com.vetcare.dto;
 
 import br.com.vetcare.entity.Usuario;
 
-public class UsuarioRequestDTO {
+public class UsuarioResponseDTO {
+
     private Long id;
     private String nome;
     private String email;
 
-    // Construtot a partir da entidade Usuario
-    public UsuarioRequestDTO(Usuario usuario) {
+    // Construtor a partir da entidade Usuario
+    public UsuarioResponseDTO(Usuario usuario) {
         this.id = usuario.getId();
         this.nome = usuario.getNome();
-        this.email - usuario.getEmail();
+        this.email = usuario.getEmail();
     }
 
     // Getters
@@ -23,7 +24,7 @@ public class UsuarioRequestDTO {
         return nome;
     }
 
-    pubic String getEmail() {
+    public String getEmail() {
         return email;
     }
 }
